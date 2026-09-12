@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "Vultax — Public Research and Vi IQ Developer Preview",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Public research discovery works now without a key. The Vi IQ gateway requests run against the local developer preview until production marketplace launch is verified. Gateway implementation and launch package. Production marketplace access is pending publisher setup and the dedicated IQ reader connection. Scores are source-reported proprietary metrics, not forecasts. See metadata for actual coverage and timestamps.\n\nStart the local gateway with npm start. Set apiToken in a private environment, never publish a token. Production URLs will be added only after verification. Vultax: https://vultax.com/methodology"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3189"
+    },
+    {
+      "key": "pair",
+      "value": "BTCUSDT"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{apiToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Public research feed — live, no key",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "https://vultax.com/feed.xml",
+        "description": "Published research articles from Vultax. Historical studies are not live IQ scores."
+      }
+    },
+    {
+      "name": "Coverage and methodology (no key)",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{baseUrl}}/v1/metadata"
+      }
+    },
+    {
+      "name": "Retrieve bounded Vi IQ observations",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/iq",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Response is JSON', () => pm.response.to.be.json);",
+              "if (pm.response.code === 200) { const b = pm.response.json(); pm.test('Data and billing contract', () => { pm.expect(b.data).to.be.an('array'); pm.expect(b.records_billed).to.eql(b.data.filter(x => x.score !== null).length); }); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Retrieve a Vi IQ score and six factors",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/iq/{{pair}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Response is JSON', () => pm.response.to.be.json);",
+              "if (pm.response.code === 200) { const b = pm.response.json(); pm.test('Data and billing contract', () => { pm.expect(b.data).to.be.an('array'); pm.expect(b.records_billed).to.eql(b.data.filter(x => x.score !== null).length); }); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read retained observations (ULTRA)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/iq/{{pair}}/history",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Response is JSON', () => pm.response.to.be.json);",
+              "if (pm.response.code === 200) { const b = pm.response.json(); pm.test('Data and billing contract', () => { pm.expect(b.data).to.be.an('array'); pm.expect(b.records_billed).to.eql(b.data.filter(x => x.score !== null).length); }); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Compare observed endpoints of one producer version (ULTRA)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/iq/{{pair}}/changes",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Response is JSON', () => pm.response.to.be.json);",
+              "if (pm.response.code === 200) { const b = pm.response.json(); pm.test('Data and billing contract', () => { pm.expect(b.data).to.be.an('array'); pm.expect(b.records_billed).to.eql(b.data.filter(x => x.score !== null).length); }); }"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

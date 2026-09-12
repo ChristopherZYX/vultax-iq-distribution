@@ -1,0 +1,1314 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vi IQ by Vultax — Crypto Market Quality API",
+    "version": "0.1.0",
+    "description": "Gateway implementation and launch package. Production marketplace access is pending publisher setup and the dedicated IQ reader connection. Scores are source-reported proprietary metrics, not forecasts. See metadata for actual coverage and timestamps.",
+    "contact": {
+      "name": "Vultax",
+      "url": "https://vultax.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:3189",
+      "description": "Local gateway; replace with the verified deployed HTTPS URL when publishing."
+    }
+  ],
+  "security": [
+    {
+      "RapidApiKey": []
+    }
+  ],
+  "paths": {
+    "/v1/iq": {
+      "get": {
+        "operationId": "getIqBatch",
+        "summary": "Retrieve bounded Vi IQ observations",
+        "parameters": [
+          {
+            "name": "pairs",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "BTCUSDT"
+            },
+            "description": "Comma-separated pairs from metadata. BASIC:1, PRO:3, ULTRA:25 maximum."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Observed IQ records. Billing counts non-null score records returned. History dates use collected_at; truncated responses contain the newest records in the window.",
+            "headers": {
+              "X-RapidAPI-Billing": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Provider response: Records=N. Configure a hard custom Records quota in RapidAPI."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "records_billed"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/IqObservation"
+                      }
+                    },
+                    "records_billed": {
+                      "type": "integer"
+                    },
+                    "truncated": {
+                      "type": "boolean"
+                    },
+                    "unavailable_pairs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "source_warning": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "change": {
+                      "type": "object",
+                      "properties": {
+                        "score_delta": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/iq/{pair}": {
+      "get": {
+        "operationId": "getIq",
+        "summary": "Retrieve a Vi IQ score and six factors",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BTCUSDT",
+                "ETHUSDT",
+                "SOLUSDT"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Observed IQ records. Billing counts non-null score records returned. History dates use collected_at; truncated responses contain the newest records in the window.",
+            "headers": {
+              "X-RapidAPI-Billing": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Provider response: Records=N. Configure a hard custom Records quota in RapidAPI."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "records_billed"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/IqObservation"
+                      }
+                    },
+                    "records_billed": {
+                      "type": "integer"
+                    },
+                    "truncated": {
+                      "type": "boolean"
+                    },
+                    "unavailable_pairs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "source_warning": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "change": {
+                      "type": "object",
+                      "properties": {
+                        "score_delta": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/iq/{pair}/history": {
+      "get": {
+        "operationId": "getIqHistory",
+        "summary": "Read retained observations (ULTRA)",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BTCUSDT",
+                "ETHUSDT",
+                "SOLUSDT"
+              ]
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 1000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Observed IQ records. Billing counts non-null score records returned. History dates use collected_at; truncated responses contain the newest records in the window.",
+            "headers": {
+              "X-RapidAPI-Billing": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Provider response: Records=N. Configure a hard custom Records quota in RapidAPI."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "records_billed"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/IqObservation"
+                      }
+                    },
+                    "records_billed": {
+                      "type": "integer"
+                    },
+                    "truncated": {
+                      "type": "boolean"
+                    },
+                    "unavailable_pairs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "source_warning": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "change": {
+                      "type": "object",
+                      "properties": {
+                        "score_delta": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/iq/{pair}/changes": {
+      "get": {
+        "operationId": "getIqChanges",
+        "summary": "Compare observed endpoints of one producer version (ULTRA)",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BTCUSDT",
+                "ETHUSDT",
+                "SOLUSDT"
+              ]
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Observed IQ records. Billing counts non-null score records returned. History dates use collected_at; truncated responses contain the newest records in the window.",
+            "headers": {
+              "X-RapidAPI-Billing": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Provider response: Records=N. Configure a hard custom Records quota in RapidAPI."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "records_billed"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/IqObservation"
+                      }
+                    },
+                    "records_billed": {
+                      "type": "integer"
+                    },
+                    "truncated": {
+                      "type": "boolean"
+                    },
+                    "unavailable_pairs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "source_warning": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "change": {
+                      "type": "object",
+                      "properties": {
+                        "score_delta": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error response; unavailable scores are never fabricated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/metadata": {
+      "get": {
+        "operationId": "getMetadata",
+        "summary": "Get supported pairs, source configuration and observed history coverage",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Current service metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "RapidApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-RapidAPI-Key"
+      }
+    },
+    "schemas": {
+      "IqObservation": {
+        "type": "object",
+        "required": [
+          "pair",
+          "score",
+          "model_id",
+          "model_version",
+          "collected_at",
+          "source_as_of",
+          "factors",
+          "freshness",
+          "observation_id"
+        ],
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 100
+          },
+          "model_id": {
+            "type": "string",
+            "enum": [
+              "vultax.crypto.vi-iq"
+            ]
+          },
+          "model_version": {
+            "type": "string",
+            "nullable": true
+          },
+          "model_identity_status": {
+            "type": "string",
+            "enum": [
+              "configured_producer_version",
+              "unversioned_upstream"
+            ]
+          },
+          "schema_version": {
+            "type": "string"
+          },
+          "collected_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "source_as_of": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "upstream_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp reported by the producer. It is not represented as a verified computation or market quote time."
+          },
+          "freshness": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "unknown"
+            ]
+          },
+          "factors": {
+            "type": "object",
+            "required": [
+              "market_quality",
+              "liquidity_health",
+              "arbitrage_potential",
+              "order_flow",
+              "volatility",
+              "news_sentiment"
+            ],
+            "properties": {
+              "market_quality": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "weight",
+                  "source_as_of",
+                  "freshness"
+                ],
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "nullable": true,
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "source_as_of": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "freshness": {
+                    "type": "string",
+                    "enum": [
+                      "fresh",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              "liquidity_health": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "weight",
+                  "source_as_of",
+                  "freshness"
+                ],
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "nullable": true,
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "source_as_of": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "freshness": {
+                    "type": "string",
+                    "enum": [
+                      "fresh",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              "arbitrage_potential": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "weight",
+                  "source_as_of",
+                  "freshness"
+                ],
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "nullable": true,
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "source_as_of": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "freshness": {
+                    "type": "string",
+                    "enum": [
+                      "fresh",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              "order_flow": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "weight",
+                  "source_as_of",
+                  "freshness"
+                ],
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "nullable": true,
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "source_as_of": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "freshness": {
+                    "type": "string",
+                    "enum": [
+                      "fresh",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              "volatility": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "weight",
+                  "source_as_of",
+                  "freshness"
+                ],
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "nullable": true,
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "source_as_of": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "freshness": {
+                    "type": "string",
+                    "enum": [
+                      "fresh",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              "news_sentiment": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "weight",
+                  "source_as_of",
+                  "freshness"
+                ],
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "nullable": true,
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "coverage": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "nullable": true
+                  },
+                  "source_as_of": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "freshness": {
+                    "type": "string",
+                    "enum": [
+                      "fresh",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "missing_factors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "market_quality",
+                "liquidity_health",
+                "arbitrage_potential",
+                "order_flow",
+                "volatility",
+                "news_sentiment"
+              ]
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "nullable": true
+          },
+          "coverage": {
+            "type": "number",
+            "nullable": true
+          },
+          "observation_id": {
+            "type": "string"
+          },
+          "methodology_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  }
+}

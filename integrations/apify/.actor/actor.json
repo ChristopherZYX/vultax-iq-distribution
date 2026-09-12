@@ -1,0 +1,12 @@
+{
+  "actorSpecification": 1,
+  "name": "vultax-vi-iq",
+  "title": "Vi IQ by Vultax — Crypto Market Quality",
+  "description": "Retrieve Vi IQ scores, factor coverage and original source times for supported crypto pairs.",
+  "version": "0.1",
+  "usesStandbyMode": false,
+  "dockerfile": "./Dockerfile",
+  "readme": "../README.md",
+  "input": "./INPUT_SCHEMA.json",
+  "output": "./OUTPUT_SCHEMA.json"
+}

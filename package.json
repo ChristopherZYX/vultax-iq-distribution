@@ -1,0 +1,20 @@
+{
+  "name": "vultax-iq-distribution",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vi IQ API gateway and marketplace integrations by Vultax",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "generate": "node scripts/generate.mjs",
+    "export:dataset": "node scripts/export-dataset.mjs",
+    "verify:live": "node scripts/verify-live.mjs"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^13.0.0"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "default": {
+    "description": "12 authored synthetic evidence-handling cases. No market observations or investment outcomes.",
+    "features": {
+      "case_id": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "provenance": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "pair": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "score": {
+        "dtype": "float64",
+        "_type": "Value"
+      },
+      "source_as_of": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "evaluated_at": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "freshness": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "model_version": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "expected_may_describe_current_score": {
+        "dtype": "bool",
+        "_type": "Value"
+      },
+      "expected_must_disclose_missing": {
+        "dtype": "bool",
+        "_type": "Value"
+      },
+      "expected_may_compare_model_history": {
+        "dtype": "bool",
+        "_type": "Value"
+      },
+      "explanation": {
+        "dtype": "string",
+        "_type": "Value"
+      }
+    },
+    "splits": {
+      "test": {
+        "name": "test",
+        "num_examples": 12
+      }
+    },
+    "license": "cc-by-4.0"
+  }
+}

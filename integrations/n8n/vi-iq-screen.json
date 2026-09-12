@@ -1,0 +1,106 @@
+{
+  "name": "Screen Vi IQ observations with freshness and coverage filters",
+  "nodes": [
+    {
+      "id": "note",
+      "name": "Setup and provenance",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        -220
+      ],
+      "parameters": {
+        "width": 680,
+        "height": 180,
+        "content": "## Vi IQ by Vultax\nSet the deployed base URL in Fetch Vi IQ. Select a Header Auth credential: Authorization = Bearer YOUR_TOKEN. This workflow contains no secrets. Manual trigger only. Keep missing and stale observations visible. Methodology: https://vultax.com/methodology"
+      }
+    },
+    {
+      "id": "manual",
+      "name": "Run screen",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fetch",
+      "name": "Fetch Vi IQ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        40
+      ],
+      "parameters": {
+        "url": "http://127.0.0.1:3189/v1/iq",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "pairs",
+              "value": "BTCUSDT,ETHUSDT,SOLUSDT"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "screen",
+      "name": "Flag evidence quality",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        40
+      ],
+      "parameters": {
+        "jsCode": "const factors = ['market_quality','liquidity_health','arbitrage_potential','order_flow','volatility','news_sentiment']; return $input.all().flatMap(item => (item.json.data || []).map(r => ({json: {...r, passes_screen: typeof r.score === 'number' && r.score >= 60 && typeof r.coverage === 'number' && r.coverage >= 0.8 && r.freshness === 'fresh' && factors.every(name => typeof r.factors?.[name]?.score === 'number' && r.factors[name].freshness === 'fresh'), screen_rule: 'score >= 60; coverage >= 0.8; all six factors present and fresh'}})));"
+      }
+    }
+  ],
+  "connections": {
+    "Run screen": {
+      "main": [
+        [
+          {
+            "node": "Fetch Vi IQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Vi IQ": {
+      "main": [
+        [
+          {
+            "node": "Flag evidence quality",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

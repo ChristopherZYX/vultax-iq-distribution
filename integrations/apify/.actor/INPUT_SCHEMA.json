@@ -1,0 +1,16 @@
+{
+  "title": "Vi IQ by Vultax",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "pairs": {
+      "title": "Crypto pairs",
+      "type": "array",
+      "description": "Choose up to three supported pairs: BTCUSDT, ETHUSDT, SOLUSDT.",
+      "editor": "stringList",
+      "items": { "type": "string" },
+      "prefill": ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+    }
+  },
+  "required": ["pairs"]
+}

@@ -1,0 +1,16 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Vi IQ observations",
+  "properties": {
+    "observations": {
+      "type": "string",
+      "title": "Collected Vi IQ records",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    },
+    "availability": {
+      "type": "string",
+      "title": "Missing pairs and upstream warnings",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/AVAILABILITY"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "vultax-vi-iq-x402",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@coinbase/cdp-sdk": "1.55.0",
+    "@x402/core": "2.25.0",
+    "@x402/evm": "2.25.0",
+    "@x402/express": "2.25.0",
+    "@x402/extensions": "2.25.0",
+    "@x402/svm": "2.25.0",
+    "express": "5.2.1"
+  }
+}

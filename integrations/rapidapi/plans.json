@@ -1,0 +1,29 @@
+{
+  "currency": "USD",
+  "status": "launch_configuration_not_activated",
+  "customQuota": "Records",
+  "quotaMode": "hard",
+  "plans": {
+    "BASIC": {
+      "monthlyPrice": 0,
+      "monthlyRecords": 250,
+      "rpm": 6,
+      "batch": 1,
+      "history": false
+    },
+    "PRO": {
+      "monthlyPrice": 49,
+      "monthlyRecords": 10000,
+      "rpm": 30,
+      "batch": 3,
+      "history": false
+    },
+    "ULTRA": {
+      "monthlyPrice": 149,
+      "monthlyRecords": 50000,
+      "rpm": 60,
+      "batch": 25,
+      "history": true
+    }
+  }
+}
