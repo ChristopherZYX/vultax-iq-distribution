@@ -16,6 +16,8 @@ Updated 2026-09-13. A built file, published source repository, draft listing and
 
 No paid plans have been activated and no live IQ data has been redistributed. The existing Vultax public research plugin and feed remain usable while the commercial API is being connected.
 
+Postman documentation is also published at https://documenter.getpostman.com/view/30539890/2sBYAytUCG with a search title, description and Vultax methodology link. Publication settings explicitly show **published**, with no environment values attached.
+
 ## Verification completed
 
 Sixteen focused tests passed, including both OpenAPI imports, authentication, usage/batch billing, concurrent cache behavior, stale/null preservation, observed-only history, n8n filtering and synthetic dataset labels. An actual server process also passed metadata, protected-route and schema smoke checks. Apify source syntax and x402 SDK imports/discovery declaration were checked. Neither a hosted Apify paid run nor an x402 payment was performed. The public research feed returned HTTP 200; production IQ correctly rejected an anonymous request with HTTP 401.

@@ -6,6 +6,8 @@ The gateway wraps Vultax's authenticated crypto Vi IQ response, preserving its c
 
 **Current release:** developer preview. Marketplace subscriptions and production IQ access are not active. [Publication status](STATUS.md) distinguishes source packages from submitted or verified listings. The [existing public research plugin](https://github.com/ChristopherZYX/vultax-research-plugin) and [research feed](https://vultax.com/feed.xml) are live free entry points.
 
+[Public API documentation on Postman](https://documenter.getpostman.com/view/30539890/2sBYAytUCG) · [Postman collection](https://www.postman.com/galactic-meadow-109643/vultax-developer-tools/collection/hhs5p3j/vultax-public-research-and-vi-iq-developer-preview)
+
 ## Run
 
 Node.js 24 or later is required; the gateway uses Node's SQLite library and has no third-party runtime dependencies.
