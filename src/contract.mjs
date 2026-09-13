@@ -11,7 +11,8 @@ export class ApiError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code; }
 }
 export const hash = value => createHash('sha256').update(value).digest('hex');
-export const iso = value => typeof value === 'string' && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
+// A timezone-less source time cannot establish freshness across different hosts.
+export const iso = value => typeof value === 'string' && /T.*(?:Z|[+-]\d{2}:?\d{2})$/i.test(value) && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
 const number = (value, min, max) => typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max ? value : null;
 export function parsePairs(value, allowed, max = 25) {
   const pairs = [...new Set(String(value).split(',').map(x => x.trim().toUpperCase()))];
@@ -37,6 +38,10 @@ export function normalize(raw, { pairs, now = Date.now(), modelVersion = null, s
     const sourceAsOf = iso(f.as_of);
     return [name, { score: f.label === 'unknown' ? null : number(f.score, 0, 100), weight: f.weight,
       coverage: number(f.coverage, 0, 1), confidence: number(f.confidence, 0, 1), source_as_of: sourceAsOf,
+      source_as_of_raw: typeof f.as_of === 'string' ? f.as_of : null,
+      label: typeof f.label === 'string' ? f.label : null,
+      details: typeof f.details === 'string' ? f.details : null,
+      notes: Array.isArray(f.notes) ? f.notes.filter(n => typeof n === 'string') : null,
       freshness: freshness(sourceAsOf, now, staleSeconds) }];
   }));
   const sourceAsOf = iso(raw.as_of);

@@ -92,3 +92,18 @@ test('composite timestamps do not stand in for missing factor timestamps', () =>
   assert.equal(result.factors.volatility.source_as_of, null); assert.equal(result.factors.volatility.freshness, 'unknown');
   assert.equal(result.model_version, null);
 });
+
+test('real-source fallback notes survive and timezone-less factors cannot claim freshness', async t => {
+  const raw = fixture();
+  raw.factors.volatility.as_of = '2026-09-13T00:00:00';
+  raw.factors.order_flow.notes = ['whale_data_stale', 'trade_window_fallback'];
+  raw.factors.order_flow.details = 'Trade flow proxy';
+  const h = await harness(t, { records: [raw] });
+  const body = await (await h.request('/v1/iq/BTCUSDT')).json();
+  const factors = body.data[0].factors;
+  assert.equal(factors.volatility.source_as_of, null);
+  assert.equal(factors.volatility.source_as_of_raw, '2026-09-13T00:00:00');
+  assert.equal(factors.volatility.freshness, 'unknown');
+  assert.deepEqual(factors.order_flow.notes, ['whale_data_stale', 'trade_window_fallback']);
+  assert.equal(factors.order_flow.details, 'Trade flow proxy');
+});

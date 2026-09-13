@@ -25,7 +25,7 @@ app.get('/healthz', (_req,res) => res.json({status:'running',network:mainnet?'ba
 app.get('/v1/iq/:pair', async (req,res,next) => {
   if (!['BTCUSDT','ETHUSDT','SOLUSDT'].includes(req.params.pair)) return res.status(400).json({error:'unsupported_pair'});
   try {
-    const url = new URL(`/v1/iq/${req.params.pair}`,env.VULTAX_GATEWAY_URL);
+    const url = new URL(`v1/iq/${req.params.pair}`,env.VULTAX_GATEWAY_URL.replace(/\/?$/, '/'));
     if (url.protocol !== 'https:' && !['127.0.0.1','localhost'].includes(url.hostname)) throw new Error('HTTPS required');
     const response = await fetch(url,{headers:{Authorization:`Bearer ${env.VULTAX_GATEWAY_TOKEN}`},signal:AbortSignal.timeout(15000),redirect:'error'});
     if (!response.ok) return res.status(503).json({error:'iq_unavailable'});

@@ -5,7 +5,7 @@ await Actor.main(async () => {
   if (!pairs.length || pairs.length > 3 || pairs.some(p => !['BTCUSDT','ETHUSDT','SOLUSDT'].includes(p))) throw new Error('Choose 1-3 supported pairs.');
   const base = process.env.VULTAX_GATEWAY_URL, token = process.env.VULTAX_GATEWAY_TOKEN;
   if (!base || !token) throw new Error('Publisher gateway connection is not configured.');
-  const url = new URL('/v1/iq', base);
+  const url = new URL('v1/iq', base.replace(/\/?$/, '/'));
   if (url.protocol !== 'https:') throw new Error('The publisher must configure an HTTPS gateway.');
   url.searchParams.set('pairs', pairs.join(','));
   const response = await fetch(url, { headers:{Authorization:`Bearer ${token}`}, signal:AbortSignal.timeout(15000), redirect:'error' });

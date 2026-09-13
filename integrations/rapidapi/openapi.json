@@ -1051,6 +1051,27 @@
                     "format": "date-time",
                     "nullable": true
                   },
+                  "source_as_of_raw": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Original producer timestamp. Without an explicit timezone, normalized time stays null and freshness is unknown."
+                  },
+                  "label": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "details": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "notes": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Producer notes, including fallback and stale-input warnings."
+                  },
                   "freshness": {
                     "type": "string",
                     "enum": [
@@ -1093,6 +1114,27 @@
                     "type": "string",
                     "format": "date-time",
                     "nullable": true
+                  },
+                  "source_as_of_raw": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Original producer timestamp. Without an explicit timezone, normalized time stays null and freshness is unknown."
+                  },
+                  "label": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "details": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "notes": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Producer notes, including fallback and stale-input warnings."
                   },
                   "freshness": {
                     "type": "string",
@@ -1137,6 +1179,27 @@
                     "format": "date-time",
                     "nullable": true
                   },
+                  "source_as_of_raw": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Original producer timestamp. Without an explicit timezone, normalized time stays null and freshness is unknown."
+                  },
+                  "label": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "details": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "notes": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Producer notes, including fallback and stale-input warnings."
+                  },
                   "freshness": {
                     "type": "string",
                     "enum": [
@@ -1179,6 +1242,27 @@
                     "type": "string",
                     "format": "date-time",
                     "nullable": true
+                  },
+                  "source_as_of_raw": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Original producer timestamp. Without an explicit timezone, normalized time stays null and freshness is unknown."
+                  },
+                  "label": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "details": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "notes": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Producer notes, including fallback and stale-input warnings."
                   },
                   "freshness": {
                     "type": "string",
@@ -1223,6 +1307,27 @@
                     "format": "date-time",
                     "nullable": true
                   },
+                  "source_as_of_raw": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Original producer timestamp. Without an explicit timezone, normalized time stays null and freshness is unknown."
+                  },
+                  "label": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "details": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "notes": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Producer notes, including fallback and stale-input warnings."
+                  },
                   "freshness": {
                     "type": "string",
                     "enum": [
@@ -1265,6 +1370,27 @@
                     "type": "string",
                     "format": "date-time",
                     "nullable": true
+                  },
+                  "source_as_of_raw": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Original producer timestamp. Without an explicit timezone, normalized time stays null and freshness is unknown."
+                  },
+                  "label": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "details": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "notes": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Producer notes, including fallback and stale-input warnings."
                   },
                   "freshness": {
                     "type": "string",
