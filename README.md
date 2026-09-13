@@ -4,7 +4,7 @@ One API implementation and launch packages for **RapidAPI, Apify, Postman, n8n, 
 
 The gateway wraps Vultax's authenticated crypto Vi IQ response, preserving its composite score, six factors, source timestamps, missing values and coverage. It adds bounded shared caching, consumer authentication, per-record usage accounting and an archive of observations collected after startup. It does not recompute the IQ model.
 
-**Current release:** developer preview. Marketplace subscriptions and production IQ access are not active. [Publication status](STATUS.md) distinguishes source packages from submitted or verified listings. The [existing public research plugin](https://github.com/ChristopherZYX/vultax-research-plugin) and [research feed](https://vultax.com/feed.xml) are live free entry points.
+**The HTTPS gateway is deployed:** [coverage metadata](https://api.vultax.com/marketplace/v1/metadata) and [OpenAPI](https://api.vultax.com/marketplace/openapi.json) are public. Authenticated BTC, ETH and SOL observations were verified on 13 September 2026. Marketplace subscriptions are not activated. [Launch links](LAUNCH.md) and [publication status](STATUS.md) distinguish deployed software, private Actors and public listings. The [existing public research plugin](https://github.com/ChristopherZYX/vultax-research-plugin) and [research feed](https://vultax.com/feed.xml) are also public.
 
 [Public API documentation on Postman](https://documenter.getpostman.com/view/30539890/2sBYAytUCG) · [Postman collection](https://www.postman.com/galactic-meadow-109643/vultax-developer-tools/collection/hhs5p3j/vultax-public-research-and-vi-iq-developer-preview)
 
@@ -35,7 +35,7 @@ Use a dedicated, read-only Vultax IQ credential for `VULTAX_UPSTREAM_KEY`. Do no
 
 See [OpenAPI](openapi.json) for schemas and authentication. Source coverage starts with BTCUSDT, ETHUSDT and SOLUSDT; the operator can expand the verified allowlist to 25 pairs. Quotas count numeric-score records returned, including repeated reads. Direct-client monthly counters use UTC calendar months; RapidAPI owns marketplace billing cycles and must enforce the configured hard Records quota.
 
-History records are deduplicated by content identity. The default 30-day retention is a maximum, not an assertion that 30 days exist. `source_as_of`, `upstream_timestamp` and `collected_at` stay separate. A source timestamp is not inferred from the latest request time. A missing producer version stays null and prevents score-delta claims.
+History records are deduplicated by content identity. Collection began on 13 September 2026; the default 30-day retention is a maximum, not an assertion that 30 days exist. `source_as_of`, `upstream_timestamp` and `collected_at` stay separate. A source timestamp is not inferred from the latest request time. A timestamp without an explicit timezone is preserved in `source_as_of_raw`, while normalized time remains null and freshness is unknown. Producer notes preserve fallback and stale-input warnings. A missing producer version stays null and prevents score-delta claims.
 
 ## Integrations
 
