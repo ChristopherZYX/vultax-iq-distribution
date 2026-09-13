@@ -1,9 +1,9 @@
 {
-  "name": "Vi IQ local — private token",
+  "name": "Vi IQ — private token",
   "values": [
     {
       "key": "baseUrl",
-      "value": "http://127.0.0.1:3189",
+      "value": "https://api.vultax.com/marketplace",
       "enabled": true
     },
     {

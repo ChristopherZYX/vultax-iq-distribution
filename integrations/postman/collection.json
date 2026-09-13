@@ -1,13 +1,13 @@
 {
   "info": {
-    "name": "Vultax — Public Research and Vi IQ Developer Preview",
+    "name": "Vultax — Public Research and Vi IQ API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Public research discovery works now without a key. The Vi IQ gateway requests run against the local developer preview until production marketplace launch is verified. Gateway implementation and launch package. Production marketplace access is pending publisher setup and the dedicated IQ reader connection. Scores are source-reported proprietary metrics, not forecasts. See metadata for actual coverage and timestamps.\n\nStart the local gateway with npm start. Set apiToken in a private environment, never publish a token. Production URLs will be added only after verification. Vultax: https://vultax.com/methodology"
+    "description": "The research feed and Vi IQ coverage metadata are public. IQ observations require a private consumer key or enabled marketplace subscription. Keep apiToken in a private environment. Read-only Vi IQ crypto observations with six factors, source timestamps, coverage and producer fallback notes. A consumer key or marketplace subscription is required for IQ data. Source-reported indicators are not forecasts; metadata reports actual observed history and model-version availability. Methodology: https://vultax.com/methodology"
   },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://127.0.0.1:3189"
+      "value": "https://api.vultax.com/marketplace"
     },
     {
       "key": "pair",

@@ -37,7 +37,7 @@
         40
       ],
       "parameters": {
-        "url": "http://127.0.0.1:3189/v1/iq",
+        "url": "https://api.vultax.com/marketplace/v1/iq",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendQuery": true,

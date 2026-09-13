@@ -3,16 +3,17 @@
   "info": {
     "title": "Vi IQ by Vultax — Crypto Market Quality API",
     "version": "0.1.0",
-    "description": "Gateway implementation and launch package. Production marketplace access is pending publisher setup and the dedicated IQ reader connection. Scores are source-reported proprietary metrics, not forecasts. See metadata for actual coverage and timestamps.",
+    "description": "Read-only Vi IQ crypto observations with six factors, source timestamps, coverage and producer fallback notes. A consumer key or marketplace subscription is required for IQ data. Source-reported indicators are not forecasts; metadata reports actual observed history and model-version availability.",
     "contact": {
       "name": "Vultax",
-      "url": "https://vultax.com"
+      "url": "https://vultax.com",
+      "email": "support@vultax.com"
     }
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:3189",
-      "description": "Local gateway; replace with the verified deployed HTTPS URL when publishing."
+      "url": "https://api.vultax.com/marketplace",
+      "description": "Vi IQ gateway; authenticated data access, public coverage metadata."
     }
   ],
   "security": [
